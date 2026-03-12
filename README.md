@@ -2,13 +2,13 @@
 
 A full-stack logistics analytics and machine learning platform built on **Supabase PostgreSQL**, **IBM Watsonx**, and **Python**. Tracks $262M+ in freight revenue, scores 85,000+ trips with live AI predictions, and exposes a REST API for real-time decision making.
 
-🌐 **[View Live Dashboard](https://YOUR_USERNAME.github.io/logistics-ai-platform)** ← update after GitHub Pages setup
+🌐 **[View Live Dashboard](dashboard/logistics_dashboard.html)** 
 
 ---
 
 ## 📸 Dashboard Preview
 
-> Open `dashboard/logistics_dashboard.html` in any browser — no server or installation needed.
+> Open `dashboard/logistics_dashboard.html` in any browser no server or installation needed.
 > 7 tabs: KPI Summary · Drivers · Routes · Fleet · Fuel · Customers · Safety
 
 ---
@@ -58,19 +58,19 @@ A full-stack logistics analytics and machine learning platform built on **Supaba
 
 ## 🤖 Machine Learning Models
 
-### Model 1 — Late Delivery Predictor
+### Model 1: Late Delivery Predictor
 - **Algorithm:** Random Forest Classifier (`class_weight="balanced"`)
 - **Target:** Will this trip be late? (0 = On-time, 1 = Late)
 - **Features:** Distance, MPG, duration, idle time, day of week, month, weight, driver experience, load type
 - **API:** `POST /predict?model=late_delivery`
 
-### Model 2 — Fuel Cost Predictor
+### Model 2: Fuel Cost Predictor
 - **Algorithm:** Gradient Boosting Regressor
 - **Target:** Predicted total fuel cost ($)
 - **Features:** Gallons, price per gallon, month, fuel type, truck model year, tank capacity
 - **API:** `POST /predict?model=fuel_cost`
 
-### Model 3 — Maintenance Risk Predictor
+### Model 3: Maintenance Risk Predictor
 - **Algorithm:** Random Forest Classifier (`class_weight="balanced"`)
 - **Target:** Will next maintenance be reactive/unplanned? (0 = Routine, 1 = Reactive)
 - **Features:** Model year, odometer, days since last service, prior maintenance count, labor hours
@@ -192,9 +192,9 @@ PROJECT_ID        = 'YOUR_WATSONX_PROJECT_ID'
 
 ## 👤 Author
 
-Built by **[Your Name]**
-- LinkedIn: [your-linkedin-url]
-- GitHub: [your-github-url]
+Built by **Mark Ochwada**
+- **[LinkedIn](https://www.linkedin.com/in/mark-ochwada-b3a1b3198/)**
+- **[GitHub](https://github.com/Mochwada)**
 
 ---
 
