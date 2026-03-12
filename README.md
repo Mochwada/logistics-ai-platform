@@ -2,7 +2,7 @@
 
 A full-stack logistics analytics and machine learning platform built on **Supabase PostgreSQL**, **IBM Watsonx**, and **Python**. Tracks $262M+ in freight revenue, scores 85,000+ trips with live AI predictions, and exposes a REST API for real-time decision making.
 
-🌐 **[View Live Dashboard](https://YOUR_USERNAME.github.io/logistics-ai-platform)** ← update after GitHub Pages setup
+🌐 **[View Live Dashboard](dashboard/logistics_dashboard.html)** ← update after GitHub Pages setup
 
 ---
 
@@ -192,9 +192,9 @@ PROJECT_ID        = 'YOUR_WATSONX_PROJECT_ID'
 
 ## 👤 Author
 
-Built by **[Your Name]**
-- LinkedIn: [your-linkedin-url]
-- GitHub: [your-github-url]
+Built by **[Mark Ochwada]**
+- LinkedIn: [(https://www.linkedin.com/in/mark-ochwada-b3a1b3198/)]
+- GitHub: [(https://github.com/Mochwada)]
 
 ---
 
