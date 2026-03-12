@@ -193,8 +193,8 @@ PROJECT_ID        = 'YOUR_WATSONX_PROJECT_ID'
 ## 👤 Author
 
 Built by **Mark Ochwada**
-- **[LinkedIn]:(https://www.linkedin.com/in/mark-ochwada-b3a1b3198/)**
-- **[GitHub]:(https://github.com/Mochwada)**
+- **[LinkedIn](https://www.linkedin.com/in/mark-ochwada-b3a1b3198/)**
+- **[GitHub](https://github.com/Mochwada)**
 
 ---
 
