@@ -2,7 +2,7 @@
 
 A full-stack logistics analytics and machine learning platform built on **Supabase PostgreSQL**, **IBM Watsonx**, and **Python**. Tracks $262M+ in freight revenue, scores 85,000+ trips with live AI predictions, and exposes a REST API for real-time decision making.
 
-🌐 **[View Live Dashboard](dashboard/logistics_dashboard.html)** 
+🌐 **[View Live Dashboard](dashboard/logistics_dashboard_branded(2).html)** 
 
 ---
 
