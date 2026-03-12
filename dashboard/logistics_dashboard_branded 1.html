@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ochwada Capital Logistics — Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  /* ── Brand Colors ── */
+  --black:    #161616;
+  --black2:   #1e1e1e;
+  --black3:   #262626;
+  --black4:   #2e2e2e;
+  --red:      #8B1A1A;
+  --red-lit:  #b32222;
+  --red-dim:  #8B1A1A33;
+  --red-glow: #8B1A1A55;
+  --navy:     #1A3A5C;
+  --navy-lit: #235080;
+  --navy-dim: #1A3A5C44;
+  --cream:    #F7F5F2;
+  --grey-l:   #E8E8E8;
+  --grey-m:   #888888;
+  --grey-d:   #444444;
+  --white:    #ffffff;
+
+  /* ── Accent variants for charts ── */
+  --amber:    #C8882A;
+  --teal:     #1A7A6E;
+  --sage:     #4A7C59;
+
+  --font: 'Rajdhani', 'Segoe UI', sans-serif;
+  --mono: 'Share Tech Mono', monospace;
+  --hud:  'Orbitron', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--black);
+  color: var(--cream);
+  font-family: var(--font);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(139,26,26,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 90%, rgba(26,58,92,0.08) 0%, transparent 60%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────── */
+header {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 36px; height: 66px;
+  background: rgba(22,22,22,0.97);
+  border-bottom: 1px solid var(--black4);
+  backdrop-filter: blur(20px);
+}
+
+.brand {
+  display: flex; align-items: center; gap: 18px;
+}
+
+.brand-logo {
+  font-family: var(--font);
+  font-size: 17px;
+  letter-spacing: 0.5px;
+  color: var(--white);
+  display: flex; align-items: center; gap: 0;
+}
+.brand-logo { display: flex; align-items: center; }
+.brand-logo .word-name  { font-family: var(--hud); font-weight: 700; letter-spacing: 2px; font-size: 14px; color: var(--white); }
+
+.header-center {
+  display: flex; gap: 6px;
+}
+
+.stat-chip {
+  padding: 5px 14px;
+  background: var(--black3);
+  border: 1px solid var(--black4);
+  border-radius: 2px;
+  font-family: var(--hud);
+  font-size: 9px;
+  color: var(--grey-m);
+  letter-spacing: 1px;
+}
+.stat-chip strong { color: var(--cream); font-weight: 500; }
+
+.header-right { display: flex; align-items: center; gap: 14px; }
+
+.live-badge {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--teal);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.live-dot {
+  width: 6px; height: 6px;
+  background: var(--teal);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(26,122,110,0.8);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.85)} }
+
+.btn-refresh {
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--red);
+  color: var(--red-lit);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .2s;
+  border-radius: 2px;
+}
+.btn-refresh:hover {
+  background: var(--red-dim);
+  color: var(--cream);
+  box-shadow: 0 0 16px var(--red-glow);
+}
+
+/* ─── NAV ─────────────────────────────────────────────────── */
+nav.nav-tabs {
+  position: sticky; top: 66px; z-index: 99;
+  display: flex; align-items: stretch;
+  background: rgba(22,22,22,0.98);
+  border-bottom: 1px solid var(--black4);
+  padding: 0 36px;
+  backdrop-filter: blur(20px);
+}
+
+.tab {
+  padding: 0 22px; height: 46px;
+  display: flex; align-items: center;
+  font-family: var(--hud);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--grey-d);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+  user-select: none;
+}
+.tab:hover { color: var(--grey-m); }
+.tab.active {
+  color: var(--cream);
+  border-bottom-color: var(--red);
+}
+
+/* ─── MAIN ────────────────────────────────────────────────── */
+main { padding: 28px 36px 56px; position: relative; z-index: 1; }
+
+.section { display: none; }
+.section.active { display: block; animation: fadeUp .28s ease; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SECTION HEADER ──────────────────────────────────────── */
+.section-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--black4);
+  position: relative;
+}
+.section-header::after {
+  content: '';
+  position: absolute; bottom: -1px; left: 0;
+  width: 48px; height: 2px;
+  background: var(--red);
+}
+.section-title {
+  font-family: var(--hud);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.section-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--grey-m);
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
+.section-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--grey-d);
+  letter-spacing: 1px;
+  border-left: 2px solid var(--red);
+  padding-left: 10px;
+}
+
+/* ─── PANEL ───────────────────────────────────────────────── */
+.panel {
+  background: var(--black2);
+  border: 1px solid var(--black4);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.panel-header {
+  padding: 13px 18px 11px;
+  border-bottom: 1px solid var(--black3);
+  display: flex; align-items: center; gap: 10px;
+}
+.panel-title {
+  font-family: var(--hud);
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--grey-m);
+  flex: 1;
+}
+.panel-accent {
+  width: 3px; height: 14px;
+  background: var(--red);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.panel-body { padding: 16px 18px 18px; }
+
+/* ─── KPI GRID ────────────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.kpi-card {
+  background: var(--black2);
+  border: 1px solid var(--black4);
+  padding: 22px 20px 18px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  transition: border-color .25s, transform .2s;
+  cursor: default;
+}
+.kpi-card:hover {
+  border-color: var(--grey-d);
+  transform: translateY(-1px);
+}
+
+/* Left accent bar */
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 2px;
+  background: var(--kpi-color, var(--red));
+}
+
+.kpi-bg {
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--kpi-color, var(--red)) 0%, transparent 70%);
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+.kpi-label {
+  font-family: var(--hud);
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--grey-m);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.kpi-value {
+  font-family: var(--hud);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--kpi-color, var(--red));
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 18px var(--kpi-color, var(--red));
+}
+.kpi-desc {
+  font-size: 11px;
+  color: var(--grey-d);
+  font-weight: 300;
+}
+
+/* ─── GRIDS ───────────────────────────────────────────────── */
+.grid-2  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.grid-3  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.grid-13 { display: grid; grid-template-columns: 1fr 3fr; gap: 12px; margin-bottom: 12px; }
+.grid-31 { display: grid; grid-template-columns: 3fr 1fr; gap: 12px; margin-bottom: 12px; }
+.grid-12 { display: grid; grid-template-columns: 1fr 2fr; gap: 12px; margin-bottom: 12px; }
+.mb { margin-bottom: 12px; }
+
+/* ─── LOADING ─────────────────────────────────────────────── */
+.loading {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; padding: 44px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 2px; color: var(--grey-d);
+  text-transform: uppercase;
+}
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid var(--black4);
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── TABLES ──────────────────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table.data-table {
+  width: 100%; border-collapse: collapse;
+  font-family: var(--mono); font-size: 11.5px;
+}
+.data-table thead tr { border-bottom: 1px solid var(--black4); }
+.data-table th {
+  padding: 11px 16px;
+  text-align: left; font-size: 9px;
+  letter-spacing: 1.5px; color: var(--grey-m);
+  font-weight: 500; text-transform: uppercase;
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--black3);
+  color: var(--cream); white-space: nowrap;
+}
+.data-table tbody tr:hover td { background: rgba(139,26,26,0.05); }
+
+.highlight     { color: var(--amber) !important; font-weight: 600; }
+.highlight-red { color: var(--red-lit) !important; font-weight: 600; }
+
+/* ─── BADGES ──────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  border-radius: 2px;
+}
+.badge-blue   { background: rgba(26,58,92,0.4);   color: #5a9fd4; border: 1px solid rgba(26,58,92,0.6); }
+.badge-green  { background: rgba(74,124,89,0.25);  color: #7abf8e; border: 1px solid rgba(74,124,89,0.4); }
+.badge-yellow { background: rgba(200,136,42,0.25); color: var(--amber); border: 1px solid rgba(200,136,42,0.4); }
+.badge-red    { background: rgba(139,26,26,0.3);   color: #d44; border: 1px solid rgba(139,26,26,0.5); }
+
+/* ─── SCROLLBAR ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--black4); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--grey-d); }
+
+/* ─── FOOTER ──────────────────────────────────────────────── */
+footer {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 36px; height: 32px;
+  background: var(--black);
+  border-top: 1px solid var(--black4);
+}
+.footer-l {
+  font-family: var(--mono); font-size: 9px;
+  color: var(--grey-d); letter-spacing: 1px;
+  display: flex; align-items: center; gap: 10px;
+}
+.footer-l .dot { width: 3px; height: 3px; background: var(--red); border-radius: 50%; }
+.footer-r {
+  font-family: var(--mono); font-size: 9px;
+  color: var(--grey-d); letter-spacing: 1px;
+}
+
+canvas { display: block; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════ HEADER ════════════════════ -->
+<header>
+  <div class="brand">
+    <!-- SVG Logo: Circular Badge Truck -->
+    <svg width="310" height="58" viewBox="0 0 310 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- ══ CIRCULAR BADGE ══ -->
+      <!-- Outer ring dark -->
+      <circle cx="29" cy="29" r="28" fill="#111111"/>
+      <!-- Outer ring border -->
+      <circle cx="29" cy="29" r="27" fill="none" stroke="#161616" stroke-width="2"/>
+      <!-- Inner grey background -->
+      <circle cx="29" cy="29" r="24" fill="#2a2a2a"/>
+      <!-- Inner dark ring -->
+      <circle cx="29" cy="29" r="24" fill="none" stroke="#8B1A1A" stroke-width="1.5"/>
+
+      <!-- ══ TRUCK BODY (forward-cab, cargo container style) ══ -->
+
+      <!-- Cargo container — red -->
+      <rect x="18" y="14" width="22" height="16" rx="1" fill="#8B1A1A"/>
+      <!-- Container panel lines -->
+      <line x1="24" y1="14" x2="24" y2="30" stroke="#6a1010" stroke-width="0.8"/>
+      <line x1="30" y1="14" x2="30" y2="30" stroke="#6a1010" stroke-width="0.8"/>
+      <line x1="36" y1="14" x2="36" y2="30" stroke="#6a1010" stroke-width="0.8"/>
+      <!-- Container top highlight -->
+      <rect x="18" y="14" width="22" height="2.5" rx="0.5" fill="#b02020"/>
+      <!-- Container bottom rail -->
+      <rect x="17" y="28" width="24" height="2" rx="0.5" fill="#222"/>
+
+      <!-- Cab body — white/light -->
+      <rect x="8" y="17" width="12" height="13" rx="1.5" fill="#e8e8e8"/>
+      <!-- Cab roof curve -->
+      <path d="M8 18 Q8 14 13 14 L18 14 L18 17 L8 17 Z" fill="#d0d0d0"/>
+      <!-- Windscreen — large, raked -->
+      <rect x="9" y="18" width="8" height="7" rx="1" fill="#1A3A5C" opacity="0.85"/>
+      <!-- Windscreen glare -->
+      <line x1="10" y1="19" x2="14" y2="23" stroke="white" stroke-width="0.6" opacity="0.4"/>
+      <!-- Cab side window -->
+      <rect x="9" y="26" width="4" height="3" rx="0.5" fill="#1A3A5C" opacity="0.7"/>
+      <!-- Cab grille -->
+      <rect x="8" y="26" width="12" height="4" rx="0" fill="#cccccc"/>
+      <line x1="8" y1="27.3" x2="20" y2="27.3" stroke="#aaa" stroke-width="0.6"/>
+      <line x1="8" y1="28.6" x2="20" y2="28.6" stroke="#aaa" stroke-width="0.6"/>
+      <line x1="8" y1="29.9" x2="20" y2="29.9" stroke="#aaa" stroke-width="0.6"/>
+      <!-- Headlight -->
+      <rect x="8" y="25.5" width="3.5" height="2" rx="0.5" fill="#ffffcc"/>
+      <!-- Red bumper stripe -->
+      <rect x="7.5" y="29.5" width="13" height="2" rx="0.5" fill="#8B1A1A"/>
+      <!-- Front bumper -->
+      <rect x="7" y="31" width="14" height="2" rx="1" fill="#999"/>
+
+      <!-- Chassis/frame -->
+      <rect x="7" y="30" width="34" height="2" rx="0.5" fill="#555"/>
+
+      <!-- Wheels — front -->
+      <circle cx="13" cy="35" r="5" fill="#222" stroke="#555" stroke-width="1"/>
+      <circle cx="13" cy="35" r="3" fill="#333" stroke="#666" stroke-width="0.8"/>
+      <circle cx="13" cy="35" r="1.5" fill="#8B1A1A"/>
+      <!-- Wheel spokes front -->
+      <line x1="13" y1="32" x2="13" y2="34" stroke="#888" stroke-width="0.8"/>
+      <line x1="13" y1="36" x2="13" y2="38" stroke="#888" stroke-width="0.8"/>
+      <line x1="10.5" y1="33.5" x2="12" y2="34.5" stroke="#888" stroke-width="0.8"/>
+      <line x1="14.5" y1="35.5" x2="15.5" y2="36.5" stroke="#888" stroke-width="0.8"/>
+
+      <!-- Wheels — drive axle pair -->
+      <circle cx="28" cy="35" r="5" fill="#222" stroke="#555" stroke-width="1"/>
+      <circle cx="28" cy="35" r="3" fill="#333" stroke="#666" stroke-width="0.8"/>
+      <circle cx="28" cy="35" r="1.5" fill="#8B1A1A"/>
+      <circle cx="36" cy="35" r="5" fill="#222" stroke="#555" stroke-width="1"/>
+      <circle cx="36" cy="35" r="3" fill="#333" stroke="#666" stroke-width="0.8"/>
+      <circle cx="36" cy="35" r="1.5" fill="#8B1A1A"/>
+
+      <!-- Ground shadow -->
+      <ellipse cx="29" cy="41" rx="20" ry="2" fill="#000" opacity="0.25"/>
+
+      <!-- ══ BOTTOM BANNER ══ -->
+      <!-- Banner bg dark -->
+      <path d="M5 43 Q29 46 53 43 L53 54 Q29 57 5 54 Z" fill="#111"/>
+      <!-- Red ribbon strip inside banner -->
+      <path d="M8 46 Q29 48.5 50 46 L50 51 Q29 53.5 8 51 Z" fill="#8B1A1A"/>
+      <!-- OCL text on red ribbon -->
+      <text x="29" y="51" text-anchor="middle" font-family="Orbitron,sans-serif" font-weight="700" font-size="5.5" letter-spacing="2" fill="#ffffff">OCL</text>
+
+      <!-- ══ WORDMARK ══ -->
+      <!-- Red divider -->
+      <rect x="73" y="10" width="2.5" height="38" rx="1" fill="#8B1A1A"/>
+
+      <!-- OCHWADA bold -->
+      <text x="83" y="28" font-family="Orbitron,sans-serif" font-weight="700" font-size="14" letter-spacing="2.5" fill="#ffffff">OCHWADA</text>
+      <!-- CAPITAL LOGISTICS spaced light -->
+      <text x="84" y="41" font-family="Rajdhani,sans-serif" font-weight="400" font-size="10" letter-spacing="4.5" fill="#7a9ab8">CAPITAL LOGISTICS</text>
+    </svg>
+  </div>
+
+  <div class="header-center">
+    <div class="stat-chip">Revenue <strong>$262.5M</strong></div>
+    <div class="stat-chip">Trips <strong>85,410</strong></div>
+    <div class="stat-chip">Fleet <strong>92 Trucks</strong></div>
+    <div class="stat-chip">AI Models <strong>3 Live</strong></div>
+  </div>
+
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>Live Data</div>
+    <button class="btn-refresh" onclick="loadAll()">↻ Refresh</button>
+  </div>
+</header>
+
+<!-- ════════════════════ NAV ════════════════════ -->
+<nav class="nav-tabs">
+  <div class="tab active" onclick="showSection('overview', this)">Overview</div>
+  <div class="tab" onclick="showSection('drivers', this)">Drivers</div>
+  <div class="tab" onclick="showSection('routes', this)">Routes</div>
+  <div class="tab" onclick="showSection('fleet', this)">Fleet</div>
+  <div class="tab" onclick="showSection('fuel', this)">Fuel</div>
+  <div class="tab" onclick="showSection('customers', this)">Customers</div>
+  <div class="tab" onclick="showSection('safety', this)">Safety</div>
+</nav>
+
+<main>
+
+<!-- ════════════════════ OVERVIEW ════════════════════ -->
+<div id="section-overview" class="section active">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Operations Overview</div>
+      <div class="section-sub">Real-time KPIs · Logistics Intelligence Platform</div>
+    </div>
+    <div class="section-meta">Live Feed</div>
+  </div>
+
+  <div class="kpi-grid" id="kpi-grid">
+    <div class="loading"><span class="spinner"></span>Loading KPIs...</div>
+  </div>
+
+  <div class="grid-31 mb">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Monthly Revenue</div></div>
+      <div class="panel-body"><canvas id="chart-revenue-month" height="210"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Fleet Status</div></div>
+      <div class="panel-body"><canvas id="chart-fleet-status" height="210"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Revenue by Customer Type</div></div>
+    <div class="panel-body"><canvas id="chart-rev-type" height="150"></canvas></div>
+  </div>
+</div>
+
+<!-- ════════════════════ DRIVERS ════════════════════ -->
+<div id="section-drivers" class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Driver Performance</div>
+      <div class="section-sub">Scorecard analytics · Revenue, on-time and fuel efficiency</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Top 15 — Revenue Generated</div></div>
+      <div class="panel-body"><canvas id="chart-driver-revenue" height="280"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Top 15 — On-Time Delivery %</div></div>
+      <div class="panel-body"><canvas id="chart-driver-ontime" height="280"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel mb">
+    <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Fuel Efficiency — All Drivers (MPG vs Fleet Average)</div></div>
+    <div class="panel-body"><canvas id="chart-driver-mpg" height="170"></canvas></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Driver Scorecard — Full Table</div></div>
+    <div class="table-wrap">
+      <table class="data-table" id="table-drivers">
+        <tbody><tr><td><div class="loading"><span class="spinner"></span>Loading...</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ ROUTES ════════════════════ -->
+<div id="section-routes" class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Route Profitability</div>
+      <div class="section-sub">Lane performance and rate-per-mile analysis</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Top 10 Routes — Rate / Mile</div></div>
+      <div class="panel-body"><canvas id="chart-route-top" height="260"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Bottom 10 Routes — Rate / Mile</div></div>
+      <div class="panel-body"><canvas id="chart-route-bottom" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Route Profitability — Full Table</div></div>
+    <div class="table-wrap">
+      <table class="data-table" id="table-routes">
+        <tbody><tr><td><div class="loading"><span class="spinner"></span>Loading...</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ FLEET ════════════════════ -->
+<div id="section-fleet" class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Fleet Status</div>
+      <div class="section-sub">92 active trucks · Utilization, downtime and composition</div>
+    </div>
+  </div>
+
+  <div class="grid-13 mb">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Fleet Composition</div></div>
+      <div class="panel-body"><canvas id="chart-fleet-donut" height="240"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Utilization % Trend</div></div>
+      <div class="panel-body"><canvas id="chart-util-trend" height="240"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Monthly Downtime Hours</div></div>
+    <div class="panel-body"><canvas id="chart-downtime" height="170"></canvas></div>
+  </div>
+</div>
+
+<!-- ════════════════════ FUEL ════════════════════ -->
+<div id="section-fuel" class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Fuel Analytics</div>
+      <div class="section-sub">196,442 fuel purchase records analysed</div>
+    </div>
+  </div>
+
+  <div class="panel mb">
+    <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Monthly Fuel Spend</div></div>
+    <div class="panel-body"><canvas id="chart-fuel-spend" height="185"></canvas></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Avg Price / Gallon</div></div>
+      <div class="panel-body"><canvas id="chart-fuel-price" height="195"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Total Gallons Consumed</div></div>
+      <div class="panel-body"><canvas id="chart-fuel-gallons" height="195"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ CUSTOMERS ════════════════════ -->
+<div id="section-customers" class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Customer Intelligence</div>
+      <div class="section-sub">Revenue breakdown and churn risk analysis</div>
+    </div>
+  </div>
+
+  <div class="grid-12 mb">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Revenue by Type</div></div>
+      <div class="panel-body"><canvas id="chart-cust-type" height="260"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Top Customers by Revenue</div></div>
+      <div class="panel-body"><canvas id="chart-cust-rev" height="260"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">At-Risk Customers — Inactive 90+ Days</div></div>
+    <div class="table-wrap">
+      <table class="data-table" id="table-atrisk">
+        <tbody><tr><td><div class="loading"><span class="spinner"></span>Loading...</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ SAFETY ════════════════════ -->
+<div id="section-safety" class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-title">Safety Monitoring</div>
+      <div class="section-sub">Incident tracking, claims analysis and trend data</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Incidents by Type</div></div>
+      <div class="panel-body"><canvas id="chart-saf-type" height="210"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Claims Cost by Type</div></div>
+      <div class="panel-body"><canvas id="chart-saf-cost" height="210"></canvas></div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Monthly Incident Trend</div></div>
+      <div class="panel-body"><canvas id="chart-saf-trend" height="195"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Monthly Claims Cost</div></div>
+      <div class="panel-body"><canvas id="chart-saf-claims" height="195"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><div class="panel-accent"></div><div class="panel-title">Safety Incidents Breakdown</div></div>
+    <div class="table-wrap">
+      <table class="data-table" id="table-safety">
+        <tbody><tr><td><div class="loading"><span class="spinner"></span>Loading...</div></td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <div class="footer-l">
+    <span>🚛 Ochwada Capital Logistics</span>
+    <div class="dot"></div>
+    <span>Logistics Intelligence Platform</span>
+    <div class="dot"></div>
+    <span>Supabase · IBM Watsonx · Python</span>
+  </div>
+  <div class="footer-r">Logistics Intelligence Platform</div>
+</footer>
+
+<script>
+const API = 'https://wwuayfcusssjethadjfk.supabase.co/functions/v1/analytics';
+const charts = {};
+
+// ── Brand palette for charts ──────────────────────────────
+const C = {
+  red:    '#8B1A1A',
+  redlit: '#b32222',
+  navy:   '#1A3A5C',
+  navylit:'#235080',
+  amber:  '#C8882A',
+  teal:   '#1A7A6E',
+  sage:   '#4A7C59',
+  grey:   '#444444',
+  cream:  '#F7F5F2',
+  border: '#2e2e2e',
+};
+
+const PALETTE = [
+  C.red, C.navy, C.amber, C.teal, C.sage,
+  '#6B3A5C', '#5C3A1A', '#1A5C4A',
+];
+
+Chart.defaults.color = '#666666';
+Chart.defaults.borderColor = '#2e2e2e';
+Chart.defaults.font.family = "'DM Mono', monospace";
+Chart.defaults.font.size = 10.5;
+
+async function fetch_data(q) {
+  const r = await fetch(`${API}?query=${q}`);
+  const j = await r.json();
+  return j.data || [];
+}
+
+function fmt_currency(n) {
+  n = parseFloat(n);
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+  return '$' + n.toFixed(0);
+}
+function fmt_num(n) { return parseFloat(n).toLocaleString(); }
+
+function destroy(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+function mkChart(id, config) {
+  destroy(id);
+  const ctx = document.getElementById(id);
+  if (!ctx) return;
+  charts[id] = new Chart(ctx, config);
+}
+
+// ── Section switching ─────────────────────────────────────
+function showSection(name, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('section-' + name).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ── KPI Cards ─────────────────────────────────────────────
+async function loadKPIs() {
+  const data = await fetch_data('kpi_summary');
+  const d = data[0] || {};
+  const grid = document.getElementById('kpi-grid');
+  const kpis = [
+    { label: 'Total Revenue',    value: fmt_currency(d.total_revenue),  desc: 'All completed loads',     color: C.amber },
+    { label: 'Completed Trips',  value: fmt_num(d.completed_trips),      desc: 'Historical total',         color: C.cream },
+    { label: 'Active Trucks',    value: d.active_trucks,                 desc: 'Available in fleet',       color: C.navylit },
+    { label: 'Fleet Avg MPG',    value: d.fleet_avg_mpg,                 desc: 'Across all trips',         color: C.teal },
+    { label: 'On-Time Rate',     value: d.avg_ontime_pct + '%',          desc: 'Delivery performance',     color: C.sage },
+    { label: 'Total Fuel Cost',  value: fmt_currency(d.total_fuel_cost), desc: 'All fuel purchases',       color: '#6B3A5C' },
+    { label: 'Active Customers', value: d.active_customers,              desc: 'Current accounts',         color: C.navy },
+    { label: 'Safety Incidents', value: d.total_incidents,               desc: 'Total recorded',           color: C.red },
+  ];
+  grid.innerHTML = kpis.map(k => `
+    <div class="kpi-card" style="--kpi-color:${k.color}">
+      <div class="kpi-bg"></div>
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+      <div class="kpi-desc">${k.desc}</div>
+    </div>
+  `).join('');
+}
+
+// ── Overview ──────────────────────────────────────────────
+async function loadOverview() {
+  const [rev, fleet, custType] = await Promise.all([
+    fetch_data('revenue_by_month'),
+    fetch_data('fleet_status'),
+    fetch_data('revenue_by_customer_type')
+  ]);
+
+  mkChart('chart-revenue-month', {
+    type: 'bar',
+    data: {
+      labels: rev.map(r => r.month),
+      datasets: [{
+        data: rev.map(r => parseFloat(r.revenue)),
+        backgroundColor: C.red + '66',
+        borderColor: C.red,
+        borderWidth: 1, borderRadius: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { callback: v => fmt_currency(v) }, grid: { color: C.border } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+
+  mkChart('chart-fleet-status', {
+    type: 'doughnut',
+    data: {
+      labels: fleet.map(f => f.status),
+      datasets: [{ data: fleet.map(f => parseInt(f.truck_count)), backgroundColor: PALETTE, borderWidth: 0, hoverOffset: 6 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '68%',
+      plugins: { legend: { position: 'right', labels: { padding: 14, boxWidth: 10, color: '#888' } } }
+    }
+  });
+
+  mkChart('chart-rev-type', {
+    type: 'bar',
+    data: {
+      labels: custType.map(c => c.customer_type),
+      datasets: [{
+        data: custType.map(c => parseFloat(c.total_revenue)),
+        backgroundColor: PALETTE, borderWidth: 0, borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${fmt_currency(ctx.raw)}` } } },
+      scales: {
+        y: { ticks: { callback: v => fmt_currency(v) }, grid: { color: C.border } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ── Drivers ───────────────────────────────────────────────
+async function loadDrivers() {
+  const [scorecard, mpg] = await Promise.all([
+    fetch_data('driver_scorecard'),
+    fetch_data('driver_mpg')
+  ]);
+
+  const top15 = scorecard.slice(0,15).reverse();
+  const fleetAvg = mpg.reduce((s,d) => s + parseFloat(d.avg_mpg), 0) / mpg.length;
+  const mpgSorted = [...mpg].sort((a,b) => parseFloat(a.avg_mpg) - parseFloat(b.avg_mpg));
+
+  mkChart('chart-driver-revenue', {
+    type: 'bar',
+    data: {
+      labels: top15.map(d => d.driver_name.split(' ')[1] || d.driver_name),
+      datasets: [{ data: top15.map(d => parseFloat(d.total_revenue)), backgroundColor: C.navy + 'bb', borderColor: C.navylit, borderWidth: 1, borderRadius: 2 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${fmt_currency(ctx.raw)}` } } },
+      scales: { x: { ticks: { callback: v => fmt_currency(v) }, grid: { color: C.border } }, y: { grid: { display: false } } }
+    }
+  });
+
+  mkChart('chart-driver-ontime', {
+    type: 'bar',
+    data: {
+      labels: top15.map(d => d.driver_name.split(' ')[1] || d.driver_name),
+      datasets: [{
+        data: top15.map(d => parseFloat(d.on_time_pct)),
+        backgroundColor: top15.map(d => {
+          const v = parseFloat(d.on_time_pct);
+          return v >= 80 ? C.sage+'bb' : v >= 60 ? C.amber+'bb' : C.red+'bb';
+        }),
+        borderWidth: 0, borderRadius: 2
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } } },
+      scales: {
+        x: { min: 0, max: 100, ticks: { callback: v => v+'%' }, grid: { color: C.border } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+
+  mkChart('chart-driver-mpg', {
+    type: 'bar',
+    data: {
+      labels: mpgSorted.map(d => d.driver_name.split(' ')[1] || d.driver_name),
+      datasets: [{
+        label: 'Avg MPG',
+        data: mpgSorted.map(d => parseFloat(d.avg_mpg)),
+        backgroundColor: mpgSorted.map(d => parseFloat(d.avg_mpg) >= fleetAvg ? C.sage+'99' : C.red+'99'),
+        borderWidth: 0, borderRadius: 2
+      },{
+        label: `Fleet Avg (${fleetAvg.toFixed(2)})`,
+        data: mpgSorted.map(() => fleetAvg),
+        type: 'line', borderColor: C.amber, borderDash: [5,5], borderWidth: 2, pointRadius: 0, fill: false
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, labels: { boxWidth: 10, padding: 16, color: '#888' } } },
+      scales: { y: { grid: { color: C.border } }, x: { grid: { display: false } } }
+    }
+  });
+
+  const tbl = document.getElementById('table-drivers');
+  tbl.innerHTML = `
+    <thead><tr>
+      <th>Driver</th><th>Terminal</th><th>Trips</th><th>Miles</th>
+      <th>Revenue</th><th>MPG</th><th>Rev/Mile</th><th>On-Time</th>
+    </tr></thead>
+    <tbody>
+    ${scorecard.map((d,i) => `<tr>
+      <td><strong>${d.driver_name}</strong></td>
+      <td><span class="badge badge-blue">${d.home_terminal}</span></td>
+      <td>${fmt_num(d.total_trips)}</td>
+      <td>${fmt_num(d.total_miles)}</td>
+      <td class="highlight">${fmt_currency(d.total_revenue)}</td>
+      <td>${parseFloat(d.avg_mpg).toFixed(2)}</td>
+      <td>$${parseFloat(d.revenue_per_mile).toFixed(2)}</td>
+      <td><span class="badge ${parseFloat(d.on_time_pct)>=80?'badge-green':parseFloat(d.on_time_pct)>=60?'badge-yellow':'badge-red'}">${d.on_time_pct}%</span></td>
+    </tr>`).join('')}
+    </tbody>`;
+}
+
+// ── Routes ────────────────────────────────────────────────
+async function loadRoutes() {
+  const [routes, rates] = await Promise.all([
+    fetch_data('route_profitability'),
+    fetch_data('route_rate_per_mile')
+  ]);
+  const top10 = rates.slice(0,10).reverse();
+  const bot10 = rates.slice(-10);
+
+  mkChart('chart-route-top', {
+    type: 'bar',
+    data: {
+      labels: top10.map(r => r.lane.length>22 ? r.lane.substring(0,22)+'…' : r.lane),
+      datasets: [{ data: top10.map(r => parseFloat(r.rate_per_mile)), backgroundColor: C.sage+'99', borderWidth: 0, borderRadius: 2 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` $${ctx.raw}/mile` } } },
+      scales: { x: { ticks: { callback: v => '$'+v }, grid: { color: C.border } }, y: { grid: { display: false }, ticks: { font: { size: 9.5 } } } }
+    }
+  });
+
+  mkChart('chart-route-bottom', {
+    type: 'bar',
+    data: {
+      labels: bot10.map(r => r.lane.length>22 ? r.lane.substring(0,22)+'…' : r.lane),
+      datasets: [{ data: bot10.map(r => parseFloat(r.rate_per_mile)), backgroundColor: C.red+'99', borderWidth: 0, borderRadius: 2 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` $${ctx.raw}/mile` } } },
+      scales: { x: { ticks: { callback: v => '$'+v }, grid: { color: C.border } }, y: { grid: { display: false }, ticks: { font: { size: 9.5 } } } }
+    }
+  });
+
+  document.getElementById('table-routes').innerHTML = `
+    <thead><tr><th>#</th><th>Lane</th><th>Loads</th><th>Total Revenue</th><th>Avg per Load</th><th>Rate/Mile</th></tr></thead>
+    <tbody>${routes.map((r,i) => `<tr>
+      <td class="highlight">${i+1}</td><td><strong>${r.lane}</strong></td>
+      <td>${r.total_loads}</td><td class="highlight">${fmt_currency(r.total_revenue)}</td>
+      <td>${fmt_currency(r.avg_per_load)}</td>
+      <td><span class="badge ${parseFloat(r.rate_per_mile)>=2?'badge-green':parseFloat(r.rate_per_mile)>=1.5?'badge-yellow':'badge-red'}">$${parseFloat(r.rate_per_mile).toFixed(3)}</span></td>
+    </tr>`).join('')}</tbody>`;
+}
+
+// ── Fleet ─────────────────────────────────────────────────
+async function loadFleet() {
+  const [status, util] = await Promise.all([
+    fetch_data('fleet_status'),
+    fetch_data('fleet_utilization')
+  ]);
+
+  mkChart('chart-fleet-donut', {
+    type: 'doughnut',
+    data: {
+      labels: status.map(s => `${s.status} (${s.truck_count})`),
+      datasets: [{ data: status.map(s => parseInt(s.truck_count)), backgroundColor: PALETTE, borderWidth: 0, hoverOffset: 8 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom', labels: { padding: 12, boxWidth: 10, color: '#888' } } } }
+  });
+
+  mkChart('chart-util-trend', {
+    type: 'line',
+    data: {
+      labels: util.map(u => u.month),
+      datasets: [{
+        label: 'Utilization %',
+        data: util.map(u => parseFloat(u.avg_util_pct)),
+        borderColor: C.navy, backgroundColor: C.navy+'22',
+        tension: 0.4, fill: true, pointRadius: 3, pointBackgroundColor: C.navylit
+      },{
+        label: '80% Target',
+        data: util.map(() => 80),
+        borderColor: C.sage, borderDash: [6,4], borderWidth: 1.5, pointRadius: 0, fill: false
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, labels: { boxWidth: 10, padding: 14, color: '#888' } } },
+      scales: { y: { ticks: { callback: v => v+'%' }, grid: { color: C.border } }, x: { ticks: { maxRotation: 45 }, grid: { display: false } } }
+    }
+  });
+
+  mkChart('chart-downtime', {
+    type: 'bar',
+    data: {
+      labels: util.map(u => u.month),
+      datasets: [{ data: util.map(u => parseFloat(u.avg_downtime_hours)), backgroundColor: C.red+'55', borderColor: C.red, borderWidth: 1, borderRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => v+'h' }, grid: { color: C.border } }, x: { ticks: { maxRotation: 45 }, grid: { display: false } } }
+    }
+  });
+}
+
+// ── Fuel ──────────────────────────────────────────────────
+async function loadFuel() {
+  const fuel = await fetch_data('fuel_monthly');
+
+  mkChart('chart-fuel-spend', {
+    type: 'bar',
+    data: {
+      labels: fuel.map(f => f.month),
+      datasets: [{ data: fuel.map(f => parseFloat(f.total_fuel_spend)), backgroundColor: C.amber+'55', borderColor: C.amber, borderWidth: 1, borderRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => fmt_currency(v) }, grid: { color: C.border } }, x: { ticks: { maxRotation: 45 }, grid: { display: false } } }
+    }
+  });
+
+  mkChart('chart-fuel-price', {
+    type: 'line',
+    data: {
+      labels: fuel.map(f => f.month),
+      datasets: [{ data: fuel.map(f => parseFloat(f.avg_price_per_gallon)), borderColor: C.amber, backgroundColor: C.amber+'18', tension: 0.4, fill: true, pointRadius: 3, pointBackgroundColor: C.amber }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => '$'+v }, grid: { color: C.border } }, x: { ticks: { maxRotation: 45 }, grid: { display: false } } }
+    }
+  });
+
+  mkChart('chart-fuel-gallons', {
+    type: 'line',
+    data: {
+      labels: fuel.map(f => f.month),
+      datasets: [{ data: fuel.map(f => parseFloat(f.total_gallons)), borderColor: C.teal, backgroundColor: C.teal+'18', tension: 0.4, fill: true, pointRadius: 3, pointBackgroundColor: C.teal }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: v => v.toLocaleString() }, grid: { color: C.border } }, x: { ticks: { maxRotation: 45 }, grid: { display: false } } }
+    }
+  });
+}
+
+// ── Customers ─────────────────────────────────────────────
+async function loadCustomers() {
+  const [cust, custType, risk] = await Promise.all([
+    fetch_data('customer_revenue'),
+    fetch_data('revenue_by_customer_type'),
+    fetch_data('customer_atrisk')
+  ]);
+
+  mkChart('chart-cust-rev', {
+    type: 'bar',
+    data: {
+      labels: [...cust].reverse().map(c => c.customer_name.length>18 ? c.customer_name.substring(0,18)+'…' : c.customer_name),
+      datasets: [{ data: [...cust].reverse().map(c => parseFloat(c.total_revenue)), backgroundColor: C.navy+'bb', borderWidth: 0, borderRadius: 2 }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${fmt_currency(ctx.raw)}` } } },
+      scales: { x: { ticks: { callback: v => fmt_currency(v) }, grid: { color: C.border } }, y: { grid: { display: false }, ticks: { font: { size: 9.5 } } } }
+    }
+  });
+
+  mkChart('chart-cust-type', {
+    type: 'doughnut',
+    data: {
+      labels: custType.map(c => c.customer_type),
+      datasets: [{ data: custType.map(c => parseFloat(c.total_revenue)), backgroundColor: PALETTE, borderWidth: 0, hoverOffset: 8 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '62%',
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, color: '#888' } }, tooltip: { callbacks: { label: ctx => ` ${fmt_currency(ctx.raw)}` } } }
+    }
+  });
+
+  document.getElementById('table-atrisk').innerHTML = `
+    <thead><tr><th>Customer</th><th>Type</th><th>Revenue Potential</th><th>Last Load</th><th>Days Inactive</th></tr></thead>
+    <tbody>${risk.map(r => `<tr>
+      <td><strong>${r.customer_name}</strong></td>
+      <td><span class="badge badge-blue">${r.customer_type}</span></td>
+      <td class="highlight">${fmt_currency(r.annual_revenue_potential)}</td>
+      <td>${r.last_load_date ? r.last_load_date.substring(0,10) : 'Never'}</td>
+      <td><span class="badge badge-red">${r.days_inactive || '—'} days</span></td>
+    </tr>`).join('')}</tbody>`;
+}
+
+// ── Safety ────────────────────────────────────────────────
+async function loadSafety() {
+  const [byType, monthly] = await Promise.all([
+    fetch_data('safety_by_type'),
+    fetch_data('safety_monthly')
+  ]);
+
+  mkChart('chart-saf-type', {
+    type: 'bar',
+    data: {
+      labels: byType.map(s => s.incident_type),
+      datasets: [{ data: byType.map(s => parseInt(s.total)), backgroundColor: C.red+'66', borderColor: C.red, borderWidth: 1, borderRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { grid: { color: C.border } }, x: { ticks: { maxRotation: 30 }, grid: { display: false } } }
+    }
+  });
+
+  mkChart('chart-saf-cost', {
+    type: 'bar',
+    data: {
+      labels: byType.map(s => s.incident_type),
+      datasets: [{ data: byType.map(s => parseFloat(s.total_claims)), backgroundColor: C.amber+'66', borderColor: C.amber, borderWidth: 1, borderRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${fmt_currency(ctx.raw)}` } } },
+      scales: { y: { ticks: { callback: v => fmt_currency(v) }, grid: { color: C.border } }, x: { ticks: { maxRotation: 30 }, grid: { display: false } } }
+    }
+  });
+
+  mkChart('chart-saf-trend', {
+    type: 'line',
+    data: {
+      labels: monthly.map(m => m.month),
+      datasets: [
+        { label: 'Total', data: monthly.map(m => parseInt(m.incidents)), borderColor: C.red, backgroundColor: C.red+'18', tension: 0.4, fill: true, pointRadius: 3, pointBackgroundColor: C.red },
+        { label: 'Preventable', data: monthly.map(m => parseInt(m.preventable)), borderColor: C.amber, borderDash: [5,4], borderWidth: 2, tension: 0.4, pointRadius: 3 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, labels: { boxWidth: 10, padding: 14, color: '#888' } } },
+      scales: { y: { grid: { color: C.border } }, x: { ticks: { maxRotation: 45 }, grid: { display: false } } }
+    }
+  });
+
+  mkChart('chart-saf-claims', {
+    type: 'bar',
+    data: {
+      labels: monthly.map(m => m.month),
+      datasets: [{ data: monthly.map(m => parseFloat(m.total_claims)), backgroundColor: C.navy+'66', borderColor: C.navylit, borderWidth: 1, borderRadius: 2 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${fmt_currency(ctx.raw)}` } } },
+      scales: { y: { ticks: { callback: v => fmt_currency(v) }, grid: { color: C.border } }, x: { ticks: { maxRotation: 45 }, grid: { display: false } } }
+    }
+  });
+
+  document.getElementById('table-safety').innerHTML = `
+    <thead><tr><th>Incident Type</th><th>Total</th><th>Preventable</th><th>Injuries</th><th>Total Claims</th><th>Avg Claim</th></tr></thead>
+    <tbody>${byType.map(s => `<tr>
+      <td><strong>${s.incident_type}</strong></td>
+      <td class="highlight-red">${s.total}</td>
+      <td><span class="badge ${parseInt(s.preventable)>0?'badge-red':'badge-green'}">${s.preventable}</span></td>
+      <td><span class="badge ${parseInt(s.injuries)>0?'badge-red':'badge-green'}">${s.injuries}</span></td>
+      <td class="highlight-red">${fmt_currency(s.total_claims)}</td>
+      <td>${fmt_currency(s.avg_claim)}</td>
+    </tr>`).join('')}</tbody>`;
+}
+
+// ── Load All ──────────────────────────────────────────────
+async function loadAll() {
+  await Promise.all([loadKPIs(), loadOverview(), loadDrivers(), loadRoutes(), loadFleet(), loadFuel(), loadCustomers(), loadSafety()]);
+}
+
+loadAll();
+</script>
+</body>
+</html>
