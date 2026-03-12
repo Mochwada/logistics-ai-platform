@@ -58,19 +58,19 @@ A full-stack logistics analytics and machine learning platform built on **Supaba
 
 ## 🤖 Machine Learning Models
 
-### Model 1 — Late Delivery Predictor
+### Model 1: Late Delivery Predictor
 - **Algorithm:** Random Forest Classifier (`class_weight="balanced"`)
 - **Target:** Will this trip be late? (0 = On-time, 1 = Late)
 - **Features:** Distance, MPG, duration, idle time, day of week, month, weight, driver experience, load type
 - **API:** `POST /predict?model=late_delivery`
 
-### Model 2 — Fuel Cost Predictor
+### Model 2: Fuel Cost Predictor
 - **Algorithm:** Gradient Boosting Regressor
 - **Target:** Predicted total fuel cost ($)
 - **Features:** Gallons, price per gallon, month, fuel type, truck model year, tank capacity
 - **API:** `POST /predict?model=fuel_cost`
 
-### Model 3 — Maintenance Risk Predictor
+### Model 3: Maintenance Risk Predictor
 - **Algorithm:** Random Forest Classifier (`class_weight="balanced"`)
 - **Target:** Will next maintenance be reactive/unplanned? (0 = Routine, 1 = Reactive)
 - **Features:** Model year, odometer, days since last service, prior maintenance count, labor hours
