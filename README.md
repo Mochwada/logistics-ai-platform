@@ -8,7 +8,7 @@ A full-stack logistics analytics and machine learning platform built on **Supaba
 
 ## 📸 Dashboard Preview
 
-> Open `dashboard/logistics_dashboard.html` in any browser — no server or installation needed.
+> Open `dashboard/logistics_dashboard.html` in any browser no server or installation needed.
 > 7 tabs: KPI Summary · Drivers · Routes · Fleet · Fuel · Customers · Safety
 
 ---
@@ -193,8 +193,8 @@ PROJECT_ID        = 'YOUR_WATSONX_PROJECT_ID'
 ## 👤 Author
 
 Built by **[Mark Ochwada]**
-- LinkedIn: [(https://www.linkedin.com/in/mark-ochwada-b3a1b3198/)]
-- GitHub: [(https://github.com/Mochwada)]
+- LinkedIn: [https://www.linkedin.com/in/mark-ochwada-b3a1b3198/]
+- GitHub: [https://github.com/Mochwada]
 
 ---
 
