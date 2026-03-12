@@ -1,0 +1,54 @@
+# ── Credentials & Secrets ─────────────────────────────
+.env
+.env.local
+.env.production
+secrets.json
+credentials.json
+autoai_deployments.json
+config.py
+
+# ── Never commit these ─────────────────────────────────
+# IBM API keys, Supabase keys, WML credentials
+# Make sure notebooks have placeholder values like:
+# apikey = 'YOUR_IBM_API_KEY_HERE'
+# SUPABASE_ANON_KEY = 'YOUR_KEY_HERE'
+
+# ── Python ─────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyc
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# ── Jupyter ────────────────────────────────────────────
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# ── AutoAI / ML output files ───────────────────────────
+autoai_*.csv
+autoai_*.png
+leaderboard_*.png
+autoai_feature_importance.png
+autoai_final_comparison.png
+*.pkl
+*.joblib
+*.model
+
+# ── OS files ───────────────────────────────────────────
+.DS_Store
+.DS_Store?
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ── IDE ────────────────────────────────────────────────
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*.swo
